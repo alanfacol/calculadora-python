@@ -4,7 +4,7 @@ from tkinter import *
 from src.functions.basic import dividir, multiplicar, somar, subtrair
 from src.functions.especial import exponencial, quadratica
 
-
+# apaga tudo
 def clear_all():
     global result, operation, result_lbl, parcial_lbl
     result = 0
@@ -12,6 +12,7 @@ def clear_all():
     result_lbl.config(text='')
     parcial_lbl.config(text='0')
 
+# função apagar ultimo digito
 def remove_last_digit():
     number = str(result_lbl.cget("text"))
     new_number = number[:-1]
@@ -30,7 +31,8 @@ def set_values(symbol, value):
     else:
         resolve_basic_opr(operation, result, result_lbl.cget("text"))
         set_values(symbol, result_lbl.cget("text"))
-        
+
+# coloca numero negativo        
 def set_negative_value():
     try:
         positive = result_lbl.cget("text")
@@ -39,16 +41,18 @@ def set_negative_value():
     except:
         pass
 
+# operações especiais
 def resolve_especial_opr(comand, value_):
     if comand == 'x²':
         value = exponencial(Decimal(value_))
         result_lbl.config(text=round(value, 2))
         parcial_lbl.config(text=result_lbl.cget("text"))
-    elif comand == 'Raizq':
+    elif comand == 'RaizQ':
         value = quadratica(Decimal(value_))
         result_lbl.config(text=round(value, 2))
         parcial_lbl.config(text=result_lbl.cget("text"))
 
+# operações básicas
 def resolve_basic_opr(comand, value1, value2):
     value = 0
     try:
@@ -75,7 +79,24 @@ def resolve_basic_opr(comand, value1, value2):
     global operation
     operation = ''
 
+# tratamento de entradas do teclado
+def key_pressed(event):
+    if str(event.keycode) == "189":
+        set_negative_value()
+    elif str(event.char) == ".":
+        set_result_lbl(event.char)
+    elif (str(event.char) == "+") or (str(event.keycode) == "109") or (str(event.char) == "*") or (str(event.char) == "/"):
+        set_values(event.char, result_lbl.cget("text"))
+    elif (str(event.char) == "=") or (str(event.keycode) == "13"):
+        resolve_basic_opr(operation, result, result_lbl.cget("text"))
+    elif str(event.keycode) == "46":
+        clear_all()
+    elif not str(event.char).isdigit():
+        result_lbl.config(text='')
+    elif str(event.char).isdigit():
+        set_result_lbl(event.char)
 
+# variáveis e constantes
 LABEL_WIDTH = 15
 LABEL_HEIGHT = 2
 LABEL_FONT = "Arial, 24"
@@ -88,9 +109,10 @@ BUTTON_COLOR_BG = '#6a89cc'
 result = 0
 operation = ''
 
-
+# toda a lógica da tela
 root = Tk()
 root.title("Calculadora Python")
+root.bind("<Key>", key_pressed)
 
 main_frm = Frame(root, bg='#2c3e50')
 main_frm.grid()
@@ -141,7 +163,7 @@ btnMult = Button(main_frm, text="*", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BU
 btnMult.grid(column=3, row=6)
 btnExpo = Button(main_frm, text="x²", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: resolve_especial_opr(btnExpo.cget("text"), result_lbl.cget("text")))
 btnExpo.grid(column=0, row=6)
-btnRaiz = Button(main_frm, text="Raizq", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: resolve_especial_opr(btnRaiz.cget("text"), result_lbl.cget("text")))
+btnRaiz = Button(main_frm, text="RaizQ", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: resolve_especial_opr(btnRaiz.cget("text"), result_lbl.cget("text")))
 btnRaiz.grid(column=1, row=6)
 btnIgual = Button(main_frm, text="=", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: resolve_basic_opr(operation, result, result_lbl.cget("text")))
 btnIgual.grid(column=2, row=7)
