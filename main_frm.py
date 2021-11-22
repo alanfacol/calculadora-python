@@ -2,7 +2,7 @@ from decimal import Decimal
 from tkinter import *
 
 from src.functions.basic import dividir, multiplicar, somar, subtrair
-from src.functions.especial import exponencial
+from src.functions.especial import exponencial, quadratica
 
 
 def clear_all():
@@ -41,7 +41,12 @@ def set_negative_value():
 
 def set_expo_value(value_):
     value = exponencial(Decimal(value_))
-    result_lbl.config(text=value)
+    result_lbl.config(text=round(value, 2))
+    parcial_lbl.config(text=result_lbl.cget("text"))
+
+def set_raizq_value(value_):
+    value = quadratica(Decimal(value_))
+    result_lbl.config(text=round(value, 2))
     parcial_lbl.config(text=result_lbl.cget("text"))
 
 def resolve_basic_opr(comand, value1, value2):
@@ -49,19 +54,19 @@ def resolve_basic_opr(comand, value1, value2):
     try:
         if comand == "+":
             value = somar(Decimal(value1), Decimal(value2))
-            result_lbl.config(text=value)
+            result_lbl.config(text=round(value, 2))
             parcial_lbl.config(text=result_lbl.cget("text"))
         elif comand == "-":
             value = subtrair(Decimal(value1), Decimal(value2))
-            result_lbl.config(text=value)
+            result_lbl.config(text=round(value, 2))
             parcial_lbl.config(text=result_lbl.cget("text"))
         elif comand == "*":
             value = multiplicar(Decimal(value1), Decimal(value2))
-            result_lbl.config(text=value)
+            result_lbl.config(text=round(value, 2))
             parcial_lbl.config(text=result_lbl.cget("text"))
         elif comand == "/":
             value = dividir(Decimal(value1), Decimal(value2))
-            result_lbl.config(text=value)
+            result_lbl.config(text=round(value, 2))
             parcial_lbl.config(text=result_lbl.cget("text"))
 
     except:
@@ -124,6 +129,8 @@ btnVirg.grid(column=2, row=5)
 btnMM = Button(main_frm, text="+/-", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_negative_value())
 btnMM.grid(column=0, row=5)
 
+btnApagar = Button(main_frm, text="<-", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: remove_last_digit())
+btnApagar.grid(column=3, row=2)
 btnSom = Button(main_frm, text="+", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_values(btnSom.cget("text"), result_lbl.cget("text")))
 btnSom.grid(column=3, row=3)
 btnSub = Button(main_frm, text="-", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_values(btnSub.cget("text"), result_lbl.cget("text")))
@@ -132,13 +139,13 @@ btnDiv = Button(main_frm, text="/", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUT
 btnDiv.grid(column=3, row=5)
 btnMult = Button(main_frm, text="*", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_values(btnMult.cget("text"), result_lbl.cget("text")))
 btnMult.grid(column=3, row=6)
+btnExpo = Button(main_frm, text="x²", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_expo_value(result_lbl.cget("text")))
+btnExpo.grid(column=0, row=6)
+btnRaiz = Button(main_frm, text="Raizq", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_raizq_value(result_lbl.cget("text")))
+btnRaiz.grid(column=1, row=6)
 btnIgual = Button(main_frm, text="=", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: resolve_basic_opr(operation, result, result_lbl.cget("text")))
-btnIgual.grid(column=2, row=6)
+btnIgual.grid(column=2, row=7)
 btnLimparTudo = Button(main_frm, text="CE", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: clear_all())
-btnLimparTudo.grid(column=1, row=6)
-btnApagar = Button(main_frm, text="<-", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: remove_last_digit())
-btnApagar.grid(column=3, row=2)
-btnFunc = Button(main_frm, text="x²", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_expo_value(result_lbl.cget("text")))
-btnFunc.grid(column=0, row=6)
+btnLimparTudo.grid(column=1, row=7)
 
 main_frm.mainloop()
