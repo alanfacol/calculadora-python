@@ -39,15 +39,15 @@ def set_negative_value():
     except:
         pass
 
-def set_expo_value(value_):
-    value = exponencial(Decimal(value_))
-    result_lbl.config(text=round(value, 2))
-    parcial_lbl.config(text=result_lbl.cget("text"))
-
-def set_raizq_value(value_):
-    value = quadratica(Decimal(value_))
-    result_lbl.config(text=round(value, 2))
-    parcial_lbl.config(text=result_lbl.cget("text"))
+def resolve_especial_opr(comand, value_):
+    if comand == 'x²':
+        value = exponencial(Decimal(value_))
+        result_lbl.config(text=round(value, 2))
+        parcial_lbl.config(text=result_lbl.cget("text"))
+    elif comand == 'Raizq':
+        value = quadratica(Decimal(value_))
+        result_lbl.config(text=round(value, 2))
+        parcial_lbl.config(text=result_lbl.cget("text"))
 
 def resolve_basic_opr(comand, value1, value2):
     value = 0
@@ -139,9 +139,9 @@ btnDiv = Button(main_frm, text="/", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUT
 btnDiv.grid(column=3, row=5)
 btnMult = Button(main_frm, text="*", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_values(btnMult.cget("text"), result_lbl.cget("text")))
 btnMult.grid(column=3, row=6)
-btnExpo = Button(main_frm, text="x²", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_expo_value(result_lbl.cget("text")))
+btnExpo = Button(main_frm, text="x²", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: resolve_especial_opr(btnExpo.cget("text"), result_lbl.cget("text")))
 btnExpo.grid(column=0, row=6)
-btnRaiz = Button(main_frm, text="Raizq", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: set_raizq_value(result_lbl.cget("text")))
+btnRaiz = Button(main_frm, text="Raizq", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: resolve_especial_opr(btnRaiz.cget("text"), result_lbl.cget("text")))
 btnRaiz.grid(column=1, row=6)
 btnIgual = Button(main_frm, text="=", font=BUTTON_FONT, width=BUTTON_WIDTH, bg=BUTTON_COLOR_BG, command=lambda: resolve_basic_opr(operation, result, result_lbl.cget("text")))
 btnIgual.grid(column=2, row=7)
